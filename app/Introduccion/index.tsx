@@ -1,18 +1,19 @@
-import React, { useRef, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useRef, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
+  Animated,
   Dimensions,
   FlatList,
-  TouchableOpacity,
-  Animated,
-  StatusBar,
   ListRenderItemInfo,
-  NativeSyntheticEvent,
   NativeScrollEvent,
+  NativeSyntheticEvent,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 
@@ -66,6 +67,10 @@ export default function OnboardingPreview() {
     // Sin navegación: en la última pantalla no hace nada.
   };
 
+  // Navegan a las rutas reales de autenticación.
+  // Ajusta "/Autenticacion/..." si terminan renombrando esa carpeta.
+const irAIniciarSesion = () => router.push("/Autenticacion/Iniciar-sesion");
+const irARegistro = () => router.push("/Autenticacion/Registro");
   const renderItem = ({ item }: ListRenderItemInfo<Slide>) => {
     return (
       <View style={[styles.slide, { width }]}>
@@ -87,12 +92,17 @@ export default function OnboardingPreview() {
 
         {item.showAuth && (
           <View style={styles.authBlock}>
-            {/* Botones solo visuales, sin acción/navegación */}
-            <TouchableOpacity style={[styles.button, styles.buttonPrimary]}>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonPrimary]}
+              onPress={irAIniciarSesion}
+            >
               <Text style={styles.buttonPrimaryText}>INICIAR SESIÓN</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, styles.buttonSecondary]}>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonSecondary]}
+              onPress={irARegistro}
+            >
               <Text style={styles.buttonSecondaryText}>REGISTRARSE</Text>
             </TouchableOpacity>
 
