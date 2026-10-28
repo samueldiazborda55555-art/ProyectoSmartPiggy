@@ -31,7 +31,7 @@ export default function IniciarSesion() {
     try {
       // TODO (Sprint 2): conectar con servicioAutenticacion real.
       await new Promise((resolver) => setTimeout(resolver, 600));
-      router.replace("/inicio");
+      router.replace("/Pestanas/Inicio");
     } finally {
       setCargando(false);
     }
