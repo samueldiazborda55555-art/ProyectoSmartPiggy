@@ -65,10 +65,14 @@ export default function OnboardingPreview() {
     setIndex(i);
   };
 
-  const onMomentumScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const onMomentumScrollEnd = (
+    e: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
     if (screenWidth <= 0) return;
 
-    const newIndex = Math.round(e.nativeEvent.contentOffset.x / screenWidth);
+    const newIndex = Math.round(
+      e.nativeEvent.contentOffset.x / screenWidth
+    );
 
     setIndex(newIndex);
   };
@@ -122,7 +126,9 @@ export default function OnboardingPreview() {
               onPress={irAIniciarSesion}
               activeOpacity={0.8}
             >
-              <Text style={styles.buttonPrimaryText}>INICIAR SESIÓN</Text>
+              <Text style={styles.buttonPrimaryText}>
+                INICIAR SESIÓN
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -130,14 +136,20 @@ export default function OnboardingPreview() {
               onPress={irARegistro}
               activeOpacity={0.8}
             >
-              <Text style={styles.buttonSecondaryText}>REGISTRARSE</Text>
+              <Text style={styles.buttonSecondaryText}>
+                REGISTRARSE
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push("/Autenticacion/Recuperar-contrasena")}
+              onPress={() =>
+                router.push("/Autenticacion/Recuperar-contrasena")
+              }
               activeOpacity={0.7}
             >
-              <Text style={styles.forgotText}>¿Olvidó su contraseña?</Text>
+              <Text style={styles.forgotText}>
+                ¿Olvidó su contraseña?
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -152,11 +164,14 @@ export default function OnboardingPreview() {
         const width = event.nativeEvent.layout.width;
 
         setScreenWidth((previousWidth) =>
-          previousWidth === width ? previousWidth : width,
+          previousWidth === width ? previousWidth : width
         );
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#ffffff"
+      />
 
       <FlatList
         ref={listRef}
@@ -192,7 +207,10 @@ export default function OnboardingPreview() {
           {SLIDES.slice(0, SLIDES.length - 1).map((_, i) => (
             <View
               key={i}
-              style={[styles.dot, i === index && styles.dotActive]}
+              style={[
+                styles.dot,
+                i === index && styles.dotActive,
+              ]}
             />
           ))}
         </View>
@@ -212,7 +230,11 @@ export default function OnboardingPreview() {
             onPress={handleNext}
             activeOpacity={0.8}
           >
-            <Ionicons name="arrow-forward" size={22} color="#ffffff" />
+            <Ionicons
+              name="arrow-forward"
+              size={22}
+              color="#ffffff"
+            />
           </TouchableOpacity>
         </View>
       )}
