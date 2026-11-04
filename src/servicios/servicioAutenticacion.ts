@@ -6,11 +6,35 @@ import {
   onAuthStateChanged,
   User,
 } from "firebase/auth";
-import { auth } from "./firebase";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "./firebase";
 
-export async function registrarUsuario(correo: string, contrasena: string) {
+type DatosPerfil = {
+  nombre: string;
+  telefono: string;
+  fechaNacimiento: string;
+};
+
+export async function registrarUsuario(
+  correo: string,
+  contrasena: string,
+  perfil?: DatosPerfil
+) {
   const credencial = await createUserWithEmailAndPassword(auth, correo, contrasena);
-  return credencial.user;
+  const usuario = credencial.user;
+
+  // Guarda los datos extra en Firestore: usuarios/{uid}
+  if (perfil) {
+    await setDoc(doc(db, "usuarios", usuario.uid), {
+      nombre: perfil.nombre,
+      correo: usuario.email,
+      telefono: perfil.telefono,
+      fechaNacimiento: perfil.fechaNacimiento,
+      creadoEn: serverTimestamp(),
+    });
+  }
+
+  return usuario;
 }
 
 export async function iniciarSesion(correo: string, contrasena: string) {
@@ -20,6 +44,12 @@ export async function iniciarSesion(correo: string, contrasena: string) {
 
 export async function cerrarSesion() {
   await signOut(auth);
+}
+
+// Lee el perfil guardado en Firestore (nombre, teléfono, etc.)
+export async function obtenerPerfil(idUsuario: string) {
+  const resultado = await getDoc(doc(db, "usuarios", idUsuario));
+  return resultado.exists() ? resultado.data() : null;
 }
 
 // Avisa cada vez que cambia el estado de sesión (entra o sale un usuario)

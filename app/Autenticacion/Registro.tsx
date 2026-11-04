@@ -1,7 +1,7 @@
 // app/Autenticacion/Registro.tsx
 import { router } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import EncabezadoPantalla from "@/components/disposicion/EncabezadoPantalla";
 import PantallaBase from "@/components/disposicion/PantallaBase";
@@ -9,6 +9,7 @@ import Boton from "@/components/ui/Boton";
 import CampoContrasena from "@/components/ui/CampoContrasena";
 import CampoTexto from "@/components/ui/CampoTexto";
 import { espaciado } from "@/constants/espaciado";
+import { registrarUsuario } from "@/servicios/servicioAutenticacion";
 import {
     errorConfirmacion,
     errorContrasena,
@@ -55,8 +56,11 @@ export default function Registro() {
 
     setCargando(true);
     try {
-      // TODO (Sprint 3): crear la cuenta con Firebase Authentication
-      await new Promise((resolver) => setTimeout(resolver, 600));
+      await registrarUsuario(correo.trim(), contrasena, {
+        nombre: nombre.trim(),
+        telefono: telefono.trim(),
+        fechaNacimiento: fecha.trim(),
+      });
 
       router.replace({
         pathname: "/Autenticacion/exito",
@@ -65,6 +69,18 @@ export default function Registro() {
           destino: "/Autenticacion/Iniciar-sesion",
         },
       });
+    } catch (error: any) {
+      const mensajes: Record<string, string> = {
+        "auth/email-already-in-use": "Ese correo ya está registrado",
+        "auth/invalid-email": "El correo no es válido",
+        "auth/weak-password": "La contraseña es muy débil",
+        "auth/operation-not-allowed":
+          "El registro con correo no está activado en Firebase",
+      };
+      Alert.alert(
+        "No se pudo crear la cuenta",
+        mensajes[error.code] ?? "Ocurrió un error, inténtalo de nuevo"
+      );
     } finally {
       setCargando(false);
     }
