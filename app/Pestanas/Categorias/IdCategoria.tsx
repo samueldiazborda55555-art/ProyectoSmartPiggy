@@ -118,7 +118,7 @@ export default function DetalleCategoria() {
 
           <Pressable
             style={styles.boton}
-            onPress={() => router.push('/Pestanas/Categorias/Agregar-gasto' as any)}
+            onPress={() => router.push(`/Pestanas/Categorias/Agregar-gasto?idCategoria=${id}` as any)}
           >
             <Text style={styles.textoBoton}>Agregar Gastos</Text>
           </Pressable>
