@@ -20,9 +20,7 @@ export const ICONOS: Record<CategoriaId, NombreIcono> = {
   mas: 'plus',
 };
 
-// Azules del Figma (todavía no están en colores.ts)
-const AZUL_CLARO = '#7CB9FF';
-const AZUL_FUERTE = '#0066FF';
+
 
 interface Props {
   categoria: Categoria;
@@ -50,7 +48,7 @@ export default function FichaCategoria({
       <View
         style={[
           styles.cuadro,
-          { backgroundColor: seleccionada ? AZUL_FUERTE : AZUL_CLARO },
+          { backgroundColor: seleccionada ? colores.azul : colores.azulClaro },
         ]}
       >
         <MaterialCommunityIcons
@@ -77,8 +75,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   nombre: {
-    fontSize: 11,
-    color: colores.textoPrincipal,
-    textAlign: 'center',
-  },
+  fontSize: 11,
+  fontWeight: '600',
+  color: colores.textoPrincipal,
+  textAlign: 'center',
+},
 });

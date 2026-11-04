@@ -1,24 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
-    Modal,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
 
+import { useRouter } from 'expo-router';
 import FichaCategoria from '../../../src/components/finanzas/FichaCategoria';
 import { CATEGORIAS } from '../../../src/constants/categorias';
 import { colores } from '../../../src/constants/colores';
 
-// Colores del Figma que todavía no están en colores.ts
-const MORADO = '#5b2a86';
-const AZUL_GASTO = '#0066FF';
-
 export default function PantallaCategorias() {
+  const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   const [nombreNuevo, setNombreNuevo] = useState('');
 
@@ -33,36 +31,26 @@ export default function PantallaCategorias() {
         {/* TEMPORAL: reemplazar por ResumenSaldo y BarraProgresoPresupuesto */}
         <View style={styles.encabezado}>
           <View style={styles.barraTitulo}>
-            <View style={styles.ladoIzquierdo}>
-              <Ionicons name="arrow-back" size={22} color={colores.textoClaro} />
+            <View style={styles.lado}>
+              <Ionicons name="arrow-back" size={22} color={colores.textoPrincipal} />
             </View>
             <Text style={styles.titulo}>Categorías</Text>
-            <View style={styles.ladoDerecho}>
+            <View style={[styles.lado, { alignItems: 'flex-end' }]}>
               <View style={styles.campana}>
-                <Ionicons
-                  name="notifications-outline"
-                  size={16}
-                  color={colores.fondoOscuro}
-                />
+                <Ionicons name="notifications-outline" size={16} color={colores.acento} />
               </View>
             </View>
           </View>
 
           <View style={styles.resumen}>
-            <View style={styles.bloque}>
-              <View style={styles.etiquetaFila}>
-                <Ionicons name="wallet-outline" size={12} color={colores.textoClaro} />
-                <Text style={styles.etiqueta}>Saldo Total</Text>
-              </View>
+            <View>
+              <Text style={styles.etiqueta}>Saldo Total</Text>
               <Text style={styles.saldo}>$7,783.00</Text>
             </View>
             <View style={styles.divisor} />
-            <View style={styles.bloque}>
-              <View style={styles.etiquetaFila}>
-                <Ionicons name="card-outline" size={12} color={colores.textoClaro} />
-                <Text style={styles.etiqueta}>Gasto Total</Text>
-              </View>
-              <Text style={[styles.saldo, { color: AZUL_GASTO }]}>-$1,187.40</Text>
+            <View>
+              <Text style={styles.etiqueta}>Gasto Total</Text>
+              <Text style={[styles.saldo, { color: colores.acento }]}>-$1,187.40</Text>
             </View>
           </View>
 
@@ -70,11 +58,9 @@ export default function PantallaCategorias() {
             <View style={styles.barraRelleno}>
               <Text style={styles.barraTexto}>30%</Text>
             </View>
+            <Text style={styles.barraMonto}>$20,000.00</Text>
           </View>
-          <View style={styles.mensajeFila}>
-            <Ionicons name="checkbox-outline" size={14} color={colores.textoClaro} />
-            <Text style={styles.mensaje}>El 30% De Tus Gastos, Suena Bien.</Text>
-          </View>
+          <Text style={styles.mensaje}>El 30% De Tus Gastos, Se Ven Bien.</Text>
         </View>
 
         <ScrollView style={styles.hoja} contentContainerStyle={styles.cuadricula}>
@@ -84,8 +70,12 @@ export default function PantallaCategorias() {
                 categoria={categoria}
                 seleccionada={categoria.id === 'comida'}
                 alPresionar={
-                  categoria.id === 'mas' ? () => setModalVisible(true) : undefined
-                }
+                  categoria.id === 'mas'
+                    ? () => setModalVisible(true)
+                    : categoria.id === 'ahorros'
+                    ? () => router.push('/Pestanas/Categorias/Ahorros' as any)
+                    : undefined
+}
               />
             </View>
           ))}
@@ -104,6 +94,7 @@ export default function PantallaCategorias() {
             <TextInput
               style={styles.campo}
               placeholder="Nombre de la categoría"
+              placeholderTextColor={colores.textoSecundario}
               value={nombreNuevo}
               onChangeText={setNombreNuevo}
             />
@@ -123,98 +114,35 @@ export default function PantallaCategorias() {
 }
 
 const styles = StyleSheet.create({
-  fondo: {
-    flex: 1,
-    backgroundColor: colores.fondoOscuro,
-    alignItems: 'center',
-  },
-  pantalla: {
-    flex: 1,
-    width: '100%',
-    maxWidth: 430,
-  },
-  encabezado: {
-    paddingTop: 48,
-    paddingHorizontal: 24,
-    paddingBottom: 28,
-    gap: 14,
-  },
-  barraTitulo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  ladoIzquierdo: { width: 32 },
-  ladoDerecho: { width: 32, alignItems: 'flex-end' },
-  titulo: {
-    color: colores.textoClaro,
-    fontSize: 18,
-    fontWeight: '600',
-  },
+  fondo: { flex: 1, backgroundColor: colores.fondo, alignItems: 'center' },
+  pantalla: { flex: 1, width: '100%', maxWidth: 430 },
+  encabezado: { paddingTop: 48, paddingHorizontal: 24, paddingBottom: 24, gap: 12 },
+  barraTitulo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  lado: { width: 32 },
+  titulo: { fontSize: 16, fontWeight: '600', color: colores.textoPrincipal },
   campana: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colores.exito,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 26, height: 26, borderRadius: 13,
+    backgroundColor: colores.mentaClara, alignItems: 'center', justifyContent: 'center',
   },
-  resumen: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 18,
-  },
-  bloque: { gap: 2 },
-  etiquetaFila: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  etiqueta: {
-    color: colores.textoClaro,
-    fontSize: 10,
-  },
-  saldo: {
-    color: colores.textoClaro,
-    fontSize: 22,
-    fontWeight: '700',
-  },
-  divisor: {
-    width: 1,
-    height: 40,
-    backgroundColor: 'rgba(255,255,255,0.6)',
-  },
+  resumen: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 18 },
+  etiqueta: { fontSize: 10, color: colores.textoEtiqueta },
+  saldo: { fontSize: 20, fontWeight: '700', color: colores.textoPrincipal },
+  divisor: { width: 1, height: 36, backgroundColor: colores.borde },
   barra: {
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: '#ffffff',
+    height: 20, borderRadius: 10, backgroundColor: colores.verdeProgreso,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     overflow: 'hidden',
   },
   barraRelleno: {
-    width: '30%',
-    height: '100%',
-    backgroundColor: MORADO,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '30%', height: '100%', backgroundColor: colores.acento,
+    alignItems: 'center', justifyContent: 'center',
   },
-  barraTexto: {
-    color: colores.textoClaro,
-    fontSize: 10,
-  },
-  mensajeFila: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  mensaje: {
-    color: colores.textoClaro,
-    fontSize: 11,
-  },
+  barraTexto: { fontSize: 9, color: colores.textoClaro, fontWeight: '600' },
+  barraMonto: { fontSize: 9, color: colores.textoPrincipal, paddingRight: 10 },
+  mensaje: { fontSize: 11, color: colores.textoPrincipal, textAlign: 'center' },
   hoja: {
-    flex: 1,
-    backgroundColor: colores.hojaClara,
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
+    flex: 1, backgroundColor: colores.hojaClara,
+    borderTopLeftRadius: 44, borderTopRightRadius: 44,
   },
   cuadricula: {
     flexDirection: 'row',
@@ -222,57 +150,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 36,
   },
-  celda: {
-    width: '33.33%',
-    alignItems: 'center',
-    marginBottom: 28,
-  },
+  celda: { width: '33.33%', alignItems: 'center', marginBottom: 28 },
   fondoModal: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center', justifyContent: 'center', padding: 24,
   },
   tarjetaModal: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: colores.fondoClaro,
-    borderRadius: 20,
-    padding: 24,
-    gap: 16,
+    width: '100%', maxWidth: 360, backgroundColor: colores.fondoClaro,
+    borderRadius: 20, padding: 24, gap: 16,
   },
-  tituloModal: {
-    fontSize: 18,
-    color: colores.textoPrincipal,
-    textAlign: 'center',
-  },
+  tituloModal: { fontSize: 18, color: colores.textoPrincipal, textAlign: 'center' },
   campo: {
-    borderWidth: 1,
-    borderColor: colores.borde,
-    borderRadius: 12,
-    padding: 12,
-    fontSize: 14,
+    borderWidth: 1, borderColor: colores.borde, borderRadius: 12,
+    padding: 12, fontSize: 14, color: colores.textoPrincipal,
   },
-  botones: {
-    flexDirection: 'row',
-    gap: 12,
-  },
+  botones: { flexDirection: 'row', gap: 12 },
   botonCancelar: {
-    flex: 1,
-    padding: 12,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: colores.borde,
-    alignItems: 'center',
+    flex: 1, padding: 12, borderRadius: 24,
+    backgroundColor: colores.mentaClara, alignItems: 'center',
   },
   textoCancelar: { color: colores.textoPrincipal },
   botonGuardar: {
-    flex: 1,
-    padding: 12,
-    borderRadius: 24,
-    backgroundColor: colores.primario,
-    alignItems: 'center',
+    flex: 1, padding: 12, borderRadius: 24,
+    backgroundColor: colores.menta, alignItems: 'center',
   },
   textoGuardar: { color: colores.textoClaro },
 });

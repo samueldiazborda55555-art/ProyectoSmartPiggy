@@ -7,10 +7,6 @@ import { Meta } from '../../tipos/meta';
 
 type NombreIcono = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
-// Azules del Figma (todavía no están en colores.ts)
-const AZUL_CLARO = '#7CB9FF';
-const AZUL_FUERTE = '#0066FF';
-
 interface Props {
   meta: Meta;
   seleccionada?: boolean;
@@ -27,7 +23,7 @@ export default function TarjetaMeta({
       <View
         style={[
           styles.cuadro,
-          { backgroundColor: seleccionada ? AZUL_FUERTE : AZUL_CLARO },
+          { backgroundColor: seleccionada ? colores.azul : colores.azulClaro },
         ]}
       >
         <MaterialCommunityIcons
@@ -42,10 +38,7 @@ export default function TarjetaMeta({
 }
 
 const styles = StyleSheet.create({
-  contenedor: {
-    alignItems: 'center',
-    gap: 6,
-  },
+  contenedor: { alignItems: 'center', gap: 6 },
   cuadro: {
     width: 76,
     height: 76,
@@ -55,6 +48,7 @@ const styles = StyleSheet.create({
   },
   nombre: {
     fontSize: 11,
+    fontWeight: '600',
     color: colores.textoPrincipal,
     textAlign: 'center',
   },

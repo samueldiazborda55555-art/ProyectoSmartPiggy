@@ -29,6 +29,7 @@ interface Props {
   opciones?: Opcion[];
   etiquetaOpcion?: string;
   textoOpcion?: string;
+  opcionInicial?: string;
   // Función que recibe todos los datos al presionar Guardar
   onGuardar?: (datos: DatosFormulario) => void;
 }
@@ -37,10 +38,11 @@ export default function FormularioMovimiento({
   opciones = CATEGORIAS.filter((c) => c.id !== 'mas'),
   etiquetaOpcion = 'Categoría',
   textoOpcion = 'Selecciona la categoría',
+  opcionInicial,
   onGuardar,
 }: Props) {
   const [fecha, setFecha] = useState('');
-  const [opcionId, setOpcionId] = useState<string | null>(null);
+  const [opcionId, setOpcionId] = useState<string | null>(opcionInicial ?? null);
   const [abierto, setAbierto] = useState(false);
   const [monto, setMonto] = useState('');
   const [nombre, setNombre] = useState('');

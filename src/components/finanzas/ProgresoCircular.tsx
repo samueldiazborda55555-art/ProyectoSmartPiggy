@@ -4,9 +4,6 @@ import Svg, { Circle } from 'react-native-svg';
 
 import { colores } from '../../constants/colores';
 
-// Azul del arco (aproximado del Figma, todavía no está en colores.ts)
-const AZUL_ARCO = '#0066FF';
-
 interface Props {
   porcentaje: number; // de 0 a 100
   tamano?: number;
@@ -21,7 +18,7 @@ export default function ProgresoCircular({
   porcentaje,
   tamano = 100,
   grosor = 10,
-  colorArco = AZUL_ARCO,
+  colorArco = colores.azul,
   colorFondo = colores.borde,
   mostrarTexto = true,
   children,

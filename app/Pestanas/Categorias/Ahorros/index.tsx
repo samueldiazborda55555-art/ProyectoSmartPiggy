@@ -6,11 +6,6 @@ import TarjetaMeta from '../../../../src/components/finanzas/TarjetaMeta';
 import { colores } from '../../../../src/constants/colores';
 import { METAS } from '../../../../src/datos-falsos-backend/metas';
 
-// Colores del Figma (todavía no están en colores.ts)
-const VERDE = '#0e8a4b';
-const VERDE_CLARO = '#cfe6d6';
-const GRIS_HOJA = '#e9eff2';
-
 export default function PantallaAhorros() {
   const router = useRouter();
 
@@ -26,7 +21,7 @@ export default function PantallaAhorros() {
             <Text style={styles.titulo}>Ahorros</Text>
             <View style={[styles.lado, { alignItems: 'flex-end' }]}>
               <View style={styles.campana}>
-                <Ionicons name="notifications-outline" size={16} color={VERDE} />
+                <Ionicons name="notifications-outline" size={16} color={colores.acento} />
               </View>
             </View>
           </View>
@@ -39,7 +34,7 @@ export default function PantallaAhorros() {
             <View style={styles.divisor} />
             <View>
               <Text style={styles.etiqueta}>Gasto Total</Text>
-              <Text style={[styles.saldo, { color: VERDE }]}>-$1,187.40</Text>
+              <Text style={[styles.saldo, { color: colores.acento }]}>-$1,187.40</Text>
             </View>
           </View>
 
@@ -84,7 +79,7 @@ export default function PantallaAhorros() {
 }
 
 const styles = StyleSheet.create({
-  fondo: { flex: 1, backgroundColor: '#ffffff', alignItems: 'center' },
+  fondo: { flex: 1, backgroundColor: colores.fondo, alignItems: 'center' },
   pantalla: { flex: 1, width: '100%', maxWidth: 430 },
   encabezado: { paddingTop: 48, paddingHorizontal: 24, paddingBottom: 24, gap: 12 },
   barraTitulo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
@@ -92,26 +87,26 @@ const styles = StyleSheet.create({
   titulo: { fontSize: 16, fontWeight: '600', color: colores.textoPrincipal },
   campana: {
     width: 26, height: 26, borderRadius: 13,
-    backgroundColor: '#dcefe3', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: colores.mentaClara, alignItems: 'center', justifyContent: 'center',
   },
-  resumen: { flexDirection: 'row', alignItems: 'center', gap: 18 },
-  etiqueta: { fontSize: 10, color: colores.textoSecundario },
+  resumen: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 18 },
+  etiqueta: { fontSize: 10, color: colores.textoEtiqueta },
   saldo: { fontSize: 20, fontWeight: '700', color: colores.textoPrincipal },
   divisor: { width: 1, height: 36, backgroundColor: colores.borde },
   barra: {
-    height: 20, borderRadius: 10, backgroundColor: VERDE_CLARO,
+    height: 20, borderRadius: 10, backgroundColor: colores.verdeProgreso,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     overflow: 'hidden',
   },
   barraRelleno: {
-    width: '30%', height: '100%', backgroundColor: VERDE,
+    width: '30%', height: '100%', backgroundColor: colores.acento,
     alignItems: 'center', justifyContent: 'center',
   },
-  barraTexto: { fontSize: 9, color: '#ffffff', fontWeight: '600' },
+  barraTexto: { fontSize: 9, color: colores.textoClaro, fontWeight: '600' },
   barraMonto: { fontSize: 9, color: colores.textoPrincipal, paddingRight: 10 },
   mensaje: { fontSize: 11, color: colores.textoPrincipal, textAlign: 'center' },
   hoja: {
-    flex: 1, backgroundColor: GRIS_HOJA,
+    flex: 1, backgroundColor: colores.hojaClara,
     borderTopLeftRadius: 44, borderTopRightRadius: 44,
   },
   contenido: { padding: 24, paddingTop: 32, gap: 32, flexGrow: 1 },
@@ -119,7 +114,7 @@ const styles = StyleSheet.create({
   celda: { width: '33.33%', alignItems: 'center', marginBottom: 24 },
   boton: {
     alignSelf: 'center', marginTop: 'auto', paddingVertical: 10, paddingHorizontal: 28,
-    borderRadius: 20, backgroundColor: VERDE,
+    borderRadius: 20, backgroundColor: colores.acento,
   },
-  textoBoton: { color: '#ffffff', fontWeight: '600', fontSize: 12 },
+  textoBoton: { color: colores.textoPrincipal, fontWeight: '600', fontSize: 12 },
 });
