@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   etiqueta: {
     ...tipografia.etiqueta,
-    color: colores.textoPrincipal,
+    color: colores.textoEtiqueta,
     marginBottom: espaciado.xs + 2,
   },
   campo: {

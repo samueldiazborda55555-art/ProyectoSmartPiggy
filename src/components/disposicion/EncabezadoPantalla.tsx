@@ -1,10 +1,11 @@
-// src/componentes/disposicion/EncabezadoPantalla.tsx
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colores } from "../../constants/colores";
-import { espaciado } from "../../constants/espaciado";
-import { tipografia } from "../../constants/tipografia";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { colores } from "@/constants/colores";
+import { espaciado } from "@/constants/espaciado";
+import { tipografia } from "@/constants/tipografia";
 
 type Props = {
   titulo?: string;
@@ -19,11 +20,13 @@ export default function EncabezadoPantalla({
   mostrarCampana = true,
   onPresionarCampana,
 }: Props) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.fila}>
+    <View style={[styles.fila, { paddingTop: insets.top + espaciado.md }]}>
       {mostrarFlecha ? (
         <TouchableOpacity onPress={() => router.back()} hitSlop={10}>
-          <Ionicons name="arrow-back" size={24} color={colores.textoClaro} />
+          <Ionicons name="arrow-back" size={24} color={colores.textoPrincipal} />
         </TouchableOpacity>
       ) : (
         <View style={styles.espacioVacio} />
@@ -39,7 +42,7 @@ export default function EncabezadoPantalla({
           hitSlop={10}
           style={styles.campana}
         >
-          <Ionicons name="notifications-outline" size={20} color={colores.acento} />
+          <Ionicons name="notifications-outline" size={20} color={colores.textoEtiqueta} />
         </TouchableOpacity>
       ) : (
         <View style={styles.espacioVacio} />
@@ -54,24 +57,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: espaciado.lg,
-    paddingTop: espaciado.lg,
-    paddingBottom: espaciado.md,
+    paddingBottom: espaciado.lg,
+    backgroundColor: colores.fondo,
   },
   titulo: {
     ...tipografia.subtitulo,
-    color: colores.textoClaro,
+    color: colores.textoPrincipal,
     flex: 1,
     textAlign: "center",
   },
   campana: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colores.hojaClara,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: colores.mentaClara,
     alignItems: "center",
     justifyContent: "center",
   },
   espacioVacio: {
-    width: 24,
+    width: 34,
   },
 });

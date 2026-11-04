@@ -1,8 +1,8 @@
-// src/componentes/ui/CampoPin.tsx
-import { useRef } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
-import { colores } from "../../constants/colores";
-import { tipografia } from "../../constants/tipografia";
+import React, { useRef } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+
+import { colores } from "@/constants/colores";
+import { tipografia } from "@/constants/tipografia";
 
 type Props = {
   longitud?: number;
@@ -10,17 +10,21 @@ type Props = {
   onCambiar: (valor: string) => void;
 };
 
-// Un solo TextInput oculto recibe el número real; los círculos
-// visibles solo muestran si hay dígito o no en cada posición.
+// Un TextInput oculto recibe lo que se escribe; los círculos solo lo muestran.
 export default function CampoPin({ longitud = 6, valor, onCambiar }: Props) {
   const inputRef = useRef<TextInput>(null);
   const digitos = Array.from({ length: longitud }, (_, i) => valor[i] ?? "");
 
   return (
-    <View style={styles.contenedor} onTouchEnd={() => inputRef.current?.focus()}>
-      {digitos.map((digito, i) => (
-        <View key={i} style={[styles.circulo, digito !== "" && styles.circuloLleno]} />
-      ))}
+    <View>
+      <Pressable style={styles.fila} onPress={() => inputRef.current?.focus()}>
+        {digitos.map((digito, i) => (
+          <View key={i} style={styles.circulo}>
+            <Text style={styles.digito}>{digito}</Text>
+          </View>
+        ))}
+      </Pressable>
+
       <TextInput
         ref={inputRef}
         value={valor}
@@ -34,10 +38,10 @@ export default function CampoPin({ longitud = 6, valor, onCambiar }: Props) {
   );
 }
 
-const TAMANO = 44;
+const TAMANO = 40;
 
 const styles = StyleSheet.create({
-  contenedor: {
+  fila: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
@@ -46,20 +50,19 @@ const styles = StyleSheet.create({
     width: TAMANO,
     height: TAMANO,
     borderRadius: TAMANO / 2,
-    borderWidth: 1.5,
+    borderWidth: 2,
     borderColor: colores.textoPrincipal,
     alignItems: "center",
     justifyContent: "center",
   },
-  circuloLleno: {
-    backgroundColor: colores.hojaClara,
-    borderColor: colores.acento,
+  digito: {
+    ...tipografia.etiqueta,
+    color: colores.textoEtiqueta,
   },
   inputOculto: {
     position: "absolute",
     width: 1,
     height: 1,
     opacity: 0,
-    ...tipografia.texto,
   },
 });

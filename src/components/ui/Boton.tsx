@@ -1,16 +1,16 @@
-// src/componentes/ui/Boton.tsx
 import {
-    ActivityIndicator,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    ViewStyle,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
 } from "react-native";
-import { colores } from "../../constants/colores";
-import { radios } from "../../constants/espaciado";
-import { tipografia } from "../../constants/tipografia";
 
-type Variante = "primario" | "secundario" | "texto";
+import { colores } from "@/constants/colores";
+import { radios } from "@/constants/espaciado";
+import { tipografia } from "@/constants/tipografia";
+
+type Variante = "primario" | "secundario" | "accion" | "texto";
 
 type Props = {
   texto: string;
@@ -18,7 +18,16 @@ type Props = {
   variante?: Variante;
   deshabilitado?: boolean;
   cargando?: boolean;
+  mayusculas?: boolean;
+  ancho?: "auto" | "completo";
   estilo?: ViewStyle;
+};
+
+const COLORES: Record<Variante, { fondo: string; texto: string }> = {
+  primario: { fondo: colores.primario, texto: colores.textoClaro },
+  secundario: { fondo: colores.secundario, texto: colores.textoClaro },
+  accion: { fondo: colores.acento, texto: colores.textoPrincipal },
+  texto: { fondo: "transparent", texto: colores.primario },
 };
 
 export default function Boton({
@@ -27,15 +36,11 @@ export default function Boton({
   variante = "primario",
   deshabilitado = false,
   cargando = false,
+  mayusculas = false,
+  ancho = "auto",
   estilo,
 }: Props) {
-  const estilosPorVariante: Record<Variante, ViewStyle> = {
-    primario: { backgroundColor: colores.primario },
-    secundario: { backgroundColor: colores.secundario },
-    texto: { backgroundColor: "transparent" },
-  };
-
-  const colorTexto = variante === "texto" ? colores.acento : colores.textoClaro;
+  const paleta = COLORES[variante];
 
   return (
     <TouchableOpacity
@@ -44,16 +49,17 @@ export default function Boton({
       onPress={onPress}
       style={[
         styles.base,
-        estilosPorVariante[variante],
+        { backgroundColor: paleta.fondo },
+        ancho === "completo" && styles.completo,
         (deshabilitado || cargando) && styles.deshabilitado,
         estilo,
       ]}
     >
       {cargando ? (
-        <ActivityIndicator color={colorTexto} />
+        <ActivityIndicator color={paleta.texto} />
       ) : (
-        <Text style={[tipografia.boton, { color: colorTexto }]}>
-          {texto.toUpperCase()}
+        <Text style={[tipografia.boton, { color: paleta.texto }]}>
+          {mayusculas ? texto.toUpperCase() : texto}
         </Text>
       )}
     </TouchableOpacity>
@@ -62,11 +68,17 @@ export default function Boton({
 
 const styles = StyleSheet.create({
   base: {
-    width: "100%",
-    paddingVertical: 16,
+    alignSelf: "center",
+    minWidth: 206,
+    height: 44,
+    paddingHorizontal: 28,
     borderRadius: radios.boton,
     alignItems: "center",
     justifyContent: "center",
+  },
+  completo: {
+    alignSelf: "stretch",
+    width: "100%",
   },
   deshabilitado: {
     opacity: 0.5,

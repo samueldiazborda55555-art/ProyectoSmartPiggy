@@ -1,10 +1,22 @@
-// app/(autenticacion)/exito.tsx
-import { useLocalSearchParams } from "expo-router";
-import PantallaExito from "../../src/components/ui/PantallaExito";
+// app/Autenticacion/exito.tsx
+import { Href, router, useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
 
-// Se navega así: router.push({ pathname: "/exito", params: { mensaje: "..." } })
+import PantallaExito from "@/components/ui/PantallaExito";
+
 export default function Exito() {
-  const { mensaje } = useLocalSearchParams<{ mensaje?: string }>();
+  const { mensaje, destino } = useLocalSearchParams<{
+    mensaje?: string;
+    destino?: string;
+  }>();
+
+  useEffect(() => {
+    const temporizador = setTimeout(() => {
+      router.replace((destino ?? "/Autenticacion/Iniciar-sesion") as Href);
+    }, 2000);
+
+    return () => clearTimeout(temporizador);
+  }, [destino]);
 
   return (
     <PantallaExito

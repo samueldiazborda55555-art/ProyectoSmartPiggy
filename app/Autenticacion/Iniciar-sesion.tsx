@@ -9,6 +9,8 @@ import CampoTexto from "@/components/ui/CampoTexto";
 import { colores } from "@/constants/colores";
 import { espaciado, radios } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
+import { errorCorreo } from "@/utilidades/validadores";
+
 
 export default function IniciarSesion() {
   const [correo, setCorreo] = useState("");
@@ -17,12 +19,13 @@ export default function IniciarSesion() {
   const [cargando, setCargando] = useState(false);
 
   function validar() {
-    const nuevosErrores: typeof errores = {};
-    if (!correo.trim()) nuevosErrores.correo = "Ingresa tu correo electrónico";
-    if (!contrasena.trim()) nuevosErrores.contrasena = "Ingresa tu contraseña";
-    setErrores(nuevosErrores);
-    return Object.keys(nuevosErrores).length === 0;
-  }
+  const nuevosErrores: typeof errores = {};
+  const mensajeCorreo = errorCorreo(correo);
+  if (mensajeCorreo) nuevosErrores.correo = mensajeCorreo;
+  if (!contrasena.trim()) nuevosErrores.contrasena = "Ingresa tu contraseña";
+  setErrores(nuevosErrores);
+  return Object.keys(nuevosErrores).length === 0;
+}
 
   async function manejarIniciarSesion() {
     if (!validar()) return;

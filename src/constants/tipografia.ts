@@ -3,10 +3,9 @@
 // Requiere: npx expo install @expo-google-fonts/poppins expo-font
 
 export const tipografia = {
-  titulo: {
-    fontFamily: "Poppins_700Bold",
-    fontSize: 24,
-    lineHeight: 32,
+  titulo: { fontFamily: "Poppins_700Bold", 
+    fontSize: 26,
+     lineHeight: 34 
   },
   subtitulo: {
     fontFamily: "Poppins_600SemiBold",
@@ -23,10 +22,9 @@ export const tipografia = {
     fontSize: 13,
     lineHeight: 18,
   },
-  boton: {
-    fontFamily: "Poppins_700Bold",
-    fontSize: 15,
-    letterSpacing: 0.5,
+  boton: { 
+    fontFamily: "Poppins_600SemiBold",
+    fontSize: 16 
   },
   pequeno: {
     fontFamily: "Poppins_400Regular",

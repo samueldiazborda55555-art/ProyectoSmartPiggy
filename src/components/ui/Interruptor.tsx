@@ -15,11 +15,11 @@ export default function Interruptor({ etiqueta, valor, onCambiar }: Props) {
     <View style={styles.fila}>
       <Text style={styles.etiqueta}>{etiqueta}</Text>
       <Switch
-        value={valor}
-        onValueChange={onCambiar}
-        trackColor={{ false: colores.borde, true: colores.primario }}
-        thumbColor={colores.fondoClaro}
-      />
+          value={valor}
+          onValueChange={onCambiar}
+          trackColor={{ false: colores.mentaApagada, true: colores.menta }}
+          thumbColor={colores.fondoClaro}
+        />
     </View>
   );
 }

@@ -1,23 +1,34 @@
+// src/constants/colores.ts
 export const colores = {
-  // Marca
-  primario: "#4caf7d", // botones verdes (Iniciar sesión, Guardar)
-  secundario: "#1f3a5f", // botones azul oscuro (Registrarse)
-  acento: "#2f6f76", // detalles verde azulado (logo, enlaces)
+  // ---- Marca ----
+  primario: "#558C68",       // botones verdes (iniciar sesión, siguiente, aceptar)
+  secundario: "#3B5E84",     // botones azules (registrarse, enviar de nuevo)
+  acento: "#109656",         // verde fuerte: barra inferior, progreso, selector, botones dentro de la app
+  menta: "#00D09E",          // interruptor encendido, botón del modal
+  mentaApagada: "#72DFC7",   // interruptor apagado
+  mentaClara: "#DFF7E2",     // círculo de la campana, botón cancelar del modal
+  verdeProgreso: "#CBDFBB",  // fondo de las barras de progreso
+  verdeIcono: "#7DB456",     // cuadros de ícono en la lista del inicio
 
-  // Texto
-  textoPrincipal: "#1f2d3d",
-  textoSecundario: "#5c6b7a",
-  textoClaro: "#ffffff",
+  // ---- Azules de la app ----
+  azul: "#0068FF",           // categoría activa, montos de gastos
+  azulMedio: "#3299FF",
+  azulClaro: "#6DB6FE",      // cuadros de categorías y metas
 
-  // Fondos
-  fondoClaro: "#ffffff",
-  hojaClara: "#eaf4f2",
-  fondoOscuro: "#0b0e2c",
+  // ---- Fondos ----
+  fondo: "#FEFEFE",          // fondo de pantalla y zona del título
+  hojaClara: "#E9EFF2",      // hoja redondeada de formularios y listas
+  fondoClaro: "#FFFFFF",     // campos de texto y tarjetas
+  gris: "#D1D1D6",           // fondo del selector diario/semanal/mensual
 
-  // Estados
-  error: "#d85a30",
-  exito: "#2ecc71",
+  // ---- Texto ----
+  textoPrincipal: "#031314",
+  textoEtiqueta: "#093030",
+  textoSecundario: "#93A8A8", // placeholders y puntos de contraseña
+  textoClaro: "#FFFFFF",
 
-  // Bordes y líneas
-  borde: "#d8dfe3",
+  // ---- Estados ----
+  error: "#D85A30",
+  exito: "#109656",
+  borde: "#D1D1D6",
 } as const;
