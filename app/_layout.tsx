@@ -1,13 +1,14 @@
-// app/_layout.tsx
+
 import {
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
-    useFonts,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+  useFonts,
 } from "@expo-google-fonts/poppins";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
 // Evita que la pantalla de carga se oculte sola mientras cargamos la fuente
@@ -28,8 +29,13 @@ export default function LayoutRaiz() {
   }, [fuentesCargadas, errorFuentes]);
 
   if (!fuentesCargadas && !errorFuentes) {
-    return null; // mientras carga, no mostramos nada (sigue el splash)
+    return null;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <>
+      <StatusBar style="dark" />
+      <Stack screenOptions={{ headerShown: false }} />
+    </>
+  );
 }

@@ -16,3 +16,7 @@ export const radios = {
   hoja: 56,    // esquinas superiores de la hoja
   barra: 56,   // esquinas superiores de la barra inferior
 } as const;
+
+export const medidas = {
+  alturaBarra: 96, // alto de la barra verde inferior (sin la zona segura)
+} as const;

@@ -1,4 +1,4 @@
-import { Movimiento } from '../tipos/movimiento';
+import type { Movimiento } from "@/tipos/movimiento";
 
 export const MOVIMIENTOS: Movimiento[] = [
   // Comida (del Figma)
@@ -46,4 +46,22 @@ export const MOVIMIENTOS: Movimiento[] = [
   // Más (inventado)
   { id: 'm27', tipo: 'gasto', fecha: '2026-04-17T15:00:00', monto: 15000, nombre: 'Gasto varios', categoriaId: 'mas' },
   { id: 'm28', tipo: 'gasto', fecha: '2026-03-10T12:00:00', monto: 10000, nombre: 'Donación', categoriaId: 'mas' },
+];
+
+
+
+function hace(dias: number, hora: number, minuto: number): string {
+  const f = new Date();
+  f.setDate(f.getDate() - dias);
+  f.setHours(hora, minuto, 0, 0);
+  return f.toISOString();
+}
+
+export const movimientosEjemplo: Movimiento[] = [
+  { id: "1", nombre: "Salario", monto: 4000, tipo: "ingreso", categoriaId: "ingresos", mensaje: "mensual", fecha: hace(5, 18, 27) },
+  { id: "2", nombre: "Mercado", monto: 100, tipo: "gasto", categoriaId: "alimentos", mensaje: "Despensa", fecha: hace(6, 17, 0) },
+  { id: "3", nombre: "Renta", monto: 674.4, tipo: "gasto", categoriaId: "alquiler", mensaje: "arriendo", fecha: hace(20, 8, 30) },
+  { id: "4", nombre: "Transporte", monto: 4.13, tipo: "gasto", categoriaId: "transporte", mensaje: "Combustible", fecha: hace(25, 7, 30) },
+  { id: "5", nombre: "Salario", monto: 4000, tipo: "ingreso", categoriaId: "ingresos", mensaje: "mensual", fecha: hace(35, 18, 39) },
+  { id: "6", nombre: "Comida", monto: 70.4, tipo: "gasto", categoriaId: "comida", mensaje: "Cena", fecha: hace(40, 19, 30) },
 ];

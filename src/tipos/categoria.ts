@@ -1,4 +1,5 @@
 export type CategoriaId =
+  | 'ingresos'
   | 'comida'
   | 'transporte'
   | 'medicina'

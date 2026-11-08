@@ -11,7 +11,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { colores } from "@/constants/colores";
-import { espaciado, radios } from "@/constants/espaciado";
+import { espaciado, medidas, radios } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
 
 type Props = {
@@ -24,7 +24,6 @@ type Props = {
   estiloHoja?: StyleProp<ViewStyle>;
 };
 
-const ALTURA_BARRA = 108;
 
 export default function PantallaBase({
   children,
@@ -41,7 +40,8 @@ export default function PantallaBase({
   const contenido: ViewStyle = {
     paddingHorizontal: espaciado.hoja,
     paddingTop: espaciado.lg,
-    paddingBottom: conBarra ? ALTURA_BARRA + espaciado.md : insets.bottom + espaciado.xl,
+    paddingBottom: conBarra
+    ? medidas.alturaBarra + insets.bottom + espaciado.md: insets.bottom + espaciado.xl,
   };
 
   return (
