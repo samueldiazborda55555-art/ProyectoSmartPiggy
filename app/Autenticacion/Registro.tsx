@@ -3,7 +3,6 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 
-import EncabezadoPantalla from "@/components/disposicion/EncabezadoPantalla";
 import PantallaBase from "@/components/disposicion/PantallaBase";
 import Boton from "@/components/ui/Boton";
 import CampoContrasena from "@/components/ui/CampoContrasena";
@@ -11,12 +10,12 @@ import CampoTexto from "@/components/ui/CampoTexto";
 import { espaciado } from "@/constants/espaciado";
 import { registrarUsuario } from "@/servicios/servicioAutenticacion";
 import {
-    errorConfirmacion,
-    errorContrasena,
-    errorCorreo,
-    errorFecha,
-    errorObligatorio,
-    errorTelefono,
+  errorConfirmacion,
+  errorContrasena,
+  errorCorreo,
+  errorFecha,
+  errorObligatorio,
+  errorTelefono,
 } from "@/utilidades/validadores";
 
 type Errores = {
@@ -87,11 +86,7 @@ export default function Registro() {
   }
 
   return (
-    <PantallaBase
-      encabezado={
-        <EncabezadoPantalla titulo="Crear una cuenta" mostrarCampana={false} />
-      }
-    >
+    <PantallaBase titulo="Crear Una Cuenta" alturaTitulo={0.17}>
       <View style={styles.formulario}>
         <CampoTexto
           etiqueta="Nombre completo"
@@ -143,7 +138,6 @@ export default function Registro() {
         />
 
         <View style={styles.boton}>
-          {/* El Figma dice "Acceder"; cámbialo a "Crear cuenta" si prefieren */}
           <Boton texto="Acceder" onPress={manejarRegistro} cargando={cargando} />
         </View>
       </View>

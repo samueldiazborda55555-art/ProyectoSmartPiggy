@@ -1,9 +1,8 @@
 // app/Autenticacion/Olvide-contrasena.tsx
 import { router } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-import EncabezadoPantalla from "@/components/disposicion/EncabezadoPantalla";
 import PantallaBase from "@/components/disposicion/PantallaBase";
 import Boton from "@/components/ui/Boton";
 import CampoTexto from "@/components/ui/CampoTexto";
@@ -28,15 +27,11 @@ export default function OlvideContrasena() {
   }
 
   return (
-    <PantallaBase
-      encabezado={
-        <EncabezadoPantalla titulo="Olvidé mi contraseña" mostrarCampana={false} />
-      }
-    >
-      <Text style={styles.subtitulo}>Restablecer contraseña</Text>
+    <PantallaBase titulo="Olvidé Mi Contraseña" alturaTitulo={0.2}>
+      <Text style={styles.subtitulo}>Restablecer Contraseña</Text>
 
       <CampoTexto
-        etiqueta="Introduzca correo electrónico"
+        etiqueta="Introduzca Correo Electrónico"
         value={correo}
         onChangeText={setCorreo}
         autoCapitalize="none"
@@ -44,7 +39,9 @@ export default function OlvideContrasena() {
         error={error}
       />
 
-      <Boton texto="Siguiente" onPress={siguiente} />
+      <View style={styles.boton}>
+        <Boton texto="Siguiente" onPress={siguiente} />
+      </View>
     </PantallaBase>
   );
 }
@@ -53,6 +50,9 @@ const styles = StyleSheet.create({
   subtitulo: {
     ...tipografia.subtitulo,
     color: colores.textoPrincipal,
-    marginBottom: espaciado.lg,
+    marginBottom: espaciado.xl,
+  },
+  boton: {
+    marginTop: espaciado.lg,
   },
 });
