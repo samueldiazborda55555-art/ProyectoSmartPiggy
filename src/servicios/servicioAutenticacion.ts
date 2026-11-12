@@ -1,12 +1,17 @@
 // src/servicios/servicioAutenticacion.ts
+export async function enviarCorreoRecuperacion(correo: string) {
+  await sendPasswordResetEmail(auth, correo);
+}
+
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
   User,
 } from "firebase/auth";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 type DatosPerfil = {

@@ -1,6 +1,6 @@
 import { Link, router } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import PantallaBase from "@/components/disposicion/PantallaBase";
 import Boton from "@/components/ui/Boton";
@@ -9,6 +9,7 @@ import CampoTexto from "@/components/ui/CampoTexto";
 import { colores } from "@/constants/colores";
 import { espaciado } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
+import { iniciarSesion } from "@/servicios/servicioAutenticacion";
 import { errorCorreo } from "@/utilidades/validadores";
 
 export default function IniciarSesion() {
@@ -30,17 +31,26 @@ export default function IniciarSesion() {
   }
 
   async function manejarIniciarSesion() {
-    if (!validar()) return;
+  if (!validar()) return;
 
-    setCargando(true);
-    try {
-      // TODO (Sprint 3): conectar con Firebase Authentication.
-      await new Promise((resolver) => setTimeout(resolver, 600));
-      router.replace("/Pestanas/Inicio");
-    } finally {
-      setCargando(false);
-    }
+  setCargando(true);
+  try {
+    await iniciarSesion(correo.trim(), contrasena);
+    router.replace("/Pestanas/Inicio");
+  } catch (error: any) {
+    const mensajes: Record<string, string> = {
+      "auth/invalid-credential": "Correo o contraseña incorrectos",
+      "auth/invalid-email": "El correo no es válido",
+      "auth/too-many-requests": "Demasiados intentos, inténtalo más tarde",
+    };
+    Alert.alert(
+      "No se pudo iniciar sesión",
+      mensajes[error.code] ?? "Ocurrió un error, inténtalo de nuevo"
+    );
+  } finally {
+    setCargando(false);
   }
+}
 
   return (
     <PantallaBase titulo={"Bienvenido De\nNuevo!"} alturaTitulo={0.3}>
