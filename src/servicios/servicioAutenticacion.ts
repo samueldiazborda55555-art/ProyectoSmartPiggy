@@ -1,4 +1,4 @@
-// src/servicios/servicioAutenticacion.ts
+// src/servicios/servicioAutenticacion.ts karen 
 export async function enviarCorreoRecuperacion(correo: string) {
   await sendPasswordResetEmail(auth, correo);
 }
