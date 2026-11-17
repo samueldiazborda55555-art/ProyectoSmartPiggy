@@ -9,6 +9,7 @@ import CampoContrasena from "@/components/ui/CampoContrasena";
 import CampoTexto from "@/components/ui/CampoTexto";
 import { espaciado } from "@/constants/espaciado";
 import { registrarUsuario } from "@/servicios/servicioAutenticacion";
+import { traducirErrorFirebase } from "@/utilidades/erroresFirebase";
 import {
   errorConfirmacion,
   errorContrasena,
@@ -68,18 +69,8 @@ export default function Registro() {
           destino: "/Autenticacion/Iniciar-sesion",
         },
       });
-    } catch (error: any) {
-      const mensajes: Record<string, string> = {
-        "auth/email-already-in-use": "Ese correo ya está registrado",
-        "auth/invalid-email": "El correo no es válido",
-        "auth/weak-password": "La contraseña es muy débil",
-        "auth/operation-not-allowed":
-          "El registro con correo no está activado en Firebase",
-      };
-      Alert.alert(
-        "No se pudo crear la cuenta",
-        mensajes[error.code] ?? "Ocurrió un error, inténtalo de nuevo"
-      );
+    } catch (error) {
+      Alert.alert("No se pudo crear la cuenta", traducirErrorFirebase(error));
     } finally {
       setCargando(false);
     }

@@ -10,6 +10,7 @@ import { colores } from "@/constants/colores";
 import { espaciado } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
 import { recuperarContrasena } from "@/servicios/servicioAutenticacion";
+import { traducirErrorFirebase } from "@/utilidades/erroresFirebase";
 import { errorCorreo } from "@/utilidades/validadores";
 
 export default function OlvideContrasena() {
@@ -32,12 +33,8 @@ export default function OlvideContrasena() {
           destino: "/Autenticacion/Iniciar-sesion",
         },
       });
-    } catch (e: any) {
-      const mensajes: Record<string, string> = {
-        "auth/invalid-email": "El correo no es válido",
-        "auth/too-many-requests": "Demasiados intentos, inténtalo más tarde",
-      };
-      Alert.alert("No se pudo enviar el correo", mensajes[e.code] ?? "Inténtalo de nuevo");
+    } catch (e) {
+      Alert.alert("No se pudo enviar el correo", traducirErrorFirebase(e));
     } finally {
       setCargando(false);
     }

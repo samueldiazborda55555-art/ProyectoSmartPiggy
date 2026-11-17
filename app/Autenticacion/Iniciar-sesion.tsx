@@ -10,6 +10,7 @@ import { colores } from "@/constants/colores";
 import { espaciado } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
 import { iniciarSesion } from "@/servicios/servicioAutenticacion";
+import { traducirErrorFirebase } from "@/utilidades/erroresFirebase";
 import { errorCorreo } from "@/utilidades/validadores";
 
 export default function IniciarSesion() {
@@ -37,19 +38,12 @@ export default function IniciarSesion() {
   try {
     await iniciarSesion(correo.trim(), contrasena);
     router.replace("/Pestanas/Inicio");
-  } catch (error: any) {
-    const mensajes: Record<string, string> = {
-      "auth/invalid-credential": "Correo o contraseña incorrectos",
-      "auth/invalid-email": "El correo no es válido",
-      "auth/too-many-requests": "Demasiados intentos, inténtalo más tarde",
-    };
-    Alert.alert(
-      "No se pudo iniciar sesión",
-      mensajes[error.code] ?? "Ocurrió un error, inténtalo de nuevo"
-    );
+  } catch (error) {
+    Alert.alert("No se pudo iniciar sesión", traducirErrorFirebase(error));
   } finally {
     setCargando(false);
   }
+
 }
 
   return (
