@@ -9,7 +9,6 @@ import BarraProgresoPresupuesto from "@/components/finanzas/BarraProgresoPresupu
 import ListaMovimientos from "@/components/finanzas/ListaMovimientos";
 import ProgresoCircular from "@/components/finanzas/ProgresoCircular";
 import ResumenSaldo from "@/components/finanzas/ResumenSaldo";
-import Boton from "@/components/ui/Boton";
 import ControlSegmentado from "@/components/ui/ControlSegmentado";
 import { colores } from "@/constants/colores";
 import { espaciado, radios } from "@/constants/espaciado";
@@ -17,13 +16,12 @@ import { tipografia } from "@/constants/tipografia";
 import { useMovimientos } from "@/hooks/useMovimientos";
 import { formatearMoneda } from "@/utilidades/formatearMoneda";
 import {
-    Periodo,
-    calcularResumen,
-    filtrarPorPeriodo,
-    mensajePresupuesto,
+  calcularResumen,
+  filtrarPorPeriodo,
+  mensajePresupuesto,
 } from "@/utilidades/resumenFinanciero";
+import type { Periodo } from "@/utilidades/resumenFinanciero";
 
-// TODO: ambos valores saldrán de Firebase / de las metas de ahorro
 const PRESUPUESTO_MENSUAL = 20000;
 const PORCENTAJE_META_DEMO = 40;
 
@@ -44,7 +42,12 @@ function FilaEstadistica({
 }) {
   return (
     <View style={styles.filaEstadistica}>
-      <Ionicons name={icono} size={26} color={colores.textoPrincipal} />
+      <Ionicons
+        name={icono}
+        size={26}
+        color={colores.textoPrincipal}
+      />
+
       <View style={styles.textosEstadistica}>
         <Text style={styles.etiquetaEstadistica}>{etiqueta}</Text>
         <Text style={styles.valorEstadistica}>{valor}</Text>
@@ -60,9 +63,14 @@ export default function Inicio() {
 
   const hayMovimientos = movimientos.length > 0;
   const resumen = calcularResumen(movimientos);
+
   const porcentaje = hayMovimientos
-    ? Math.min(100, Math.round((resumen.gastoTotal / PRESUPUESTO_MENSUAL) * 100))
+    ? Math.min(
+        100,
+        Math.round((resumen.gastoTotal / PRESUPUESTO_MENSUAL) * 100)
+      )
     : 0;
+
   const visibles = filtrarPorPeriodo(movimientos, periodo);
   const porcentajeMeta = hayMovimientos ? PORCENTAJE_META_DEMO : 0;
 
@@ -70,12 +78,22 @@ export default function Inicio() {
     <PantallaBase
       conBarra
       encabezado={
-        <View style={[styles.zonaSuperior, { paddingTop: insets.top + espaciado.md }]}>
+        <View
+          style={[
+            styles.zonaSuperior,
+            { paddingTop: insets.top + espaciado.md },
+          ]}
+        >
           <View style={styles.cabecera}>
             <View style={styles.saludo}>
               <View style={styles.avatar}>
-                <Ionicons name="person" size={20} color={colores.secundario} />
+                <Ionicons
+                  name="person"
+                  size={20}
+                  color={colores.secundario}
+                />
               </View>
+
               <Text style={styles.textoSaludo}>Hola, Bienvenido</Text>
             </View>
 
@@ -83,12 +101,20 @@ export default function Inicio() {
               onPress={() => router.push("/Notificaciones")}
               hitSlop={10}
               style={styles.campana}
+              accessibilityLabel="Ver notificaciones"
             >
-              <Ionicons name="notifications-outline" size={20} color={colores.textoEtiqueta} />
+              <Ionicons
+                name="notifications-outline"
+                size={20}
+                color={colores.textoEtiqueta}
+              />
             </TouchableOpacity>
           </View>
 
-          <ResumenSaldo saldoTotal={resumen.saldo} gastoTotal={resumen.gastoTotal} />
+          <ResumenSaldo
+            saldoTotal={resumen.saldo}
+            gastoTotal={resumen.gastoTotal}
+          />
 
           <BarraProgresoPresupuesto
             porcentaje={porcentaje}
@@ -98,20 +124,26 @@ export default function Inicio() {
         </View>
       }
     >
-      {/* Tarjeta: ahorro en metas + resumen de la semana */}
       <View style={styles.tarjeta}>
         <View style={styles.metas}>
           <ProgresoCircular
             porcentaje={porcentajeMeta}
             tamano={64}
-            colorFondo={hayMovimientos ? "transparent" : colores.textoPrincipal}
+            colorFondo={
+              hayMovimientos ? "transparent" : colores.textoPrincipal
+            }
           >
             {hayMovimientos ? (
-              <Ionicons name="car-outline" size={30} color={colores.textoPrincipal} />
+              <Ionicons
+                name="car-outline"
+                size={30}
+                color={colores.textoPrincipal}
+              />
             ) : (
               <Text style={styles.porcentajeMeta}>0%</Text>
             )}
           </ProgresoCircular>
+
           <Text style={styles.etiquetaMetas}>{"Ahorro En\nMetas"}</Text>
         </View>
 
@@ -120,17 +152,36 @@ export default function Inicio() {
         <View style={styles.estadisticas}>
           <FilaEstadistica
             icono="cash-outline"
-            etiqueta="Ingresos la semana pasada"
+            etiqueta="Ingresos de la semana pasada"
             valor={formatearMoneda(resumen.ingresosSemana)}
           />
+
           <View style={styles.divisorHorizontal} />
+
           <FilaEstadistica
             icono="restaurant-outline"
-            etiqueta="Comida la semana pasada"
+            etiqueta="Comida dee la semana pasada"
             valor={`-${formatearMoneda(resumen.comidaSemana)}`}
           />
         </View>
       </View>
+
+      {/* Visible para usuarios con movimientos y sin movimientos. */}
+      <TouchableOpacity
+        style={styles.botonAgregarIngreso}
+        activeOpacity={0.8}
+        onPress={() => router.push("/Pestanas/Inicio/Agregar-ingreso")}
+        accessibilityRole="button"
+        accessibilityLabel="Agregar ingresos"
+      >
+        <Ionicons
+          name="add-circle"
+          size={21}
+          color={colores.textoClaro}
+        />
+
+        <Text style={styles.textoAgregarIngreso}>Agregar ingresos</Text>
+      </TouchableOpacity>
 
       <View style={styles.selector}>
         <ControlSegmentado
@@ -141,27 +192,33 @@ export default function Inicio() {
       </View>
 
       {!hayMovimientos ? (
-        // ---- Usuario nuevo ----
         <View style={styles.vacio}>
           <View style={styles.iconoVacio}>
-            <Ionicons name="wallet-outline" size={26} color={colores.acento} />
+            <Ionicons
+              name="wallet-outline"
+              size={26}
+              color={colores.acento}
+            />
           </View>
-          <Text style={styles.tituloVacio}>Aún No Tienes Movimientos</Text>
-          <Text style={styles.textoVacio}>
-            {"Registra Tu Primer Ingreso O Gasto Aquí\nVerás El Resumen De Tu Dinero"}
+
+          <Text style={styles.tituloVacio}>
+            Aún no tienes movimientos
           </Text>
-          <Boton
-            texto="Agregar Movimiento"
-            variante="accion"
-            onPress={() => router.push("/Pestanas/Categorias/Agregar-gasto")}
-          />
+
+          <Text style={styles.textoVacio}>
+            {"Registra tu primer ingreso o gasto aquí\nVerás el resumen de tu dinero"}
+          </Text>
         </View>
       ) : visibles.length === 0 ? (
-        // ---- Tiene datos, pero ninguno en el periodo elegido ----
-        <Text style={styles.sinPeriodo}>No hay movimientos en este periodo</Text>
+        <Text style={styles.sinPeriodo}>
+          No hay movimientos en este periodo
+        </Text>
       ) : (
-        // ---- Usuario con datos ----
-        <ListaMovimientos movimientos={visibles} variante="inicio" agruparPorMes={false} />
+        <ListaMovimientos
+          movimientos={visibles}
+          variante="inicio"
+          agruparPorMes={false}
+        />
       )}
     </PantallaBase>
   );
@@ -207,7 +264,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   tarjeta: {
     flexDirection: "row",
     alignItems: "center",
@@ -262,15 +318,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colores.textoPrincipal,
   },
-
+  botonAgregarIngreso: {
+    width: "100%",
+    minHeight: 44,
+    backgroundColor: colores.acento,
+    borderRadius: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    marginTop: espaciado.md,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  textoAgregarIngreso: {
+    fontFamily: "Poppins_500Medium",
+    fontSize: 14,
+    color: colores.textoClaro,
+  },
   selector: {
     marginTop: espaciado.md,
     marginBottom: espaciado.sm,
   },
-
   vacio: {
     alignItems: "center",
-    marginTop: espaciado.lg,
+    marginTop: espaciado.md,
     gap: espaciado.sm,
   },
   iconoVacio: {
@@ -286,6 +358,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colores.textoPrincipal,
     marginTop: espaciado.xs,
+    textAlign: "center",
   },
   textoVacio: {
     ...tipografia.pequeno,

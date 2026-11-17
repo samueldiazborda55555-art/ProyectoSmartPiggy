@@ -1,3 +1,4 @@
+
 import { ReactNode } from "react";
 import {
   ScrollView,
@@ -8,22 +9,22 @@ import {
   ViewStyle,
   useWindowDimensions,
 } from "react-native";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { colores } from "@/constants/colores";
-import { espaciado, medidas, radios } from "@/constants/espaciado";
+import { espaciado, radios, medidas } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
 
 type Props = {
   children: ReactNode;
-  encabezado?: ReactNode;   // <EncabezadoPantalla /> (flecha + título + campana)
-  titulo?: string;          // título grande en la zona blanca (si no hay encabezado)
-  alturaTitulo?: number;    // fracción de la pantalla que ocupa la zona blanca (0 a 1)
+  encabezado?: ReactNode;
+  titulo?: string;
+  alturaTitulo?: number;
   conScroll?: boolean;
-  conBarra?: boolean;       // true si la pantalla tiene la barra verde inferior
+  conBarra?: boolean;
   estiloHoja?: StyleProp<ViewStyle>;
 };
-
 
 export default function PantallaBase({
   children,
@@ -37,12 +38,15 @@ export default function PantallaBase({
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  const contenido: ViewStyle = {
-    paddingHorizontal: espaciado.hoja,
-    paddingTop: espaciado.lg,
-    paddingBottom: conBarra
-    ? medidas.alturaBarra + insets.bottom + espaciado.md: insets.bottom + espaciado.xl,
-  };
+
+const contenido: ViewStyle = {
+  paddingHorizontal: espaciado.hoja,
+  paddingTop: espaciado.lg,
+
+  paddingBottom: conBarra
+    ? medidas.alturaBarra + insets.bottom + espaciado.md
+    : insets.bottom + espaciado.xl,
+};
 
   return (
     <View style={styles.fondo}>
@@ -52,14 +56,21 @@ export default function PantallaBase({
         <View
           style={[
             styles.zonaTitulo,
-            { height: height * alturaTitulo, paddingTop: insets.top },
+            {
+              height: height * alturaTitulo,
+              paddingTop: insets.top,
+            },
           ]}
         >
-          <Text style={styles.titulo}>{titulo}</Text>
+          <Text style={styles.titulo}>
+            {titulo}
+          </Text>
         </View>
       )}
 
-      {!encabezado && !titulo && <View style={{ height: insets.top }} />}
+      {!encabezado && !titulo && (
+        <View style={{ height: insets.top }} />
+      )}
 
       {conScroll ? (
         <ScrollView
@@ -71,7 +82,15 @@ export default function PantallaBase({
           {children}
         </ScrollView>
       ) : (
-        <View style={[styles.hoja, contenido, estiloHoja]}>{children}</View>
+        <View
+          style={[
+            styles.hoja,
+            contenido,
+            estiloHoja,
+          ]}
+        >
+          {children}
+        </View>
       )}
     </View>
   );
@@ -82,16 +101,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colores.fondo,
   },
+
   zonaTitulo: {
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: espaciado.lg,
   },
+
   titulo: {
     ...tipografia.titulo,
     color: colores.textoPrincipal,
     textAlign: "center",
   },
+
   hoja: {
     flex: 1,
     backgroundColor: colores.hojaClara,

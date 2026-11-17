@@ -38,7 +38,7 @@ export default function CampoContrasena({
         />
         <TouchableOpacity onPress={() => setVisible((v) => !v)} hitSlop={10}>
           <Ionicons
-            name={visible ? "eye-off-outline" : "eye-outline"}
+            name={visible ? "eye-outline" : "eye-off-outline"}
             size={20}
             color={colores.textoPrincipal}
           />
