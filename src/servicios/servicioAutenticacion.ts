@@ -1,10 +1,13 @@
 // src/servicios/servicioAutenticacion.ts
 import {
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
   updateProfile,
   type User,
 } from "firebase/auth";
@@ -66,4 +69,30 @@ export async function recuperarContrasena(correo: string) {
 export async function obtenerPerfil(idUsuario: string) {
   const resultado = await getDoc(doc(db, "usuarios", idUsuario));
   return resultado.exists() ? resultado.data() : null;
+}
+
+// Firebase exige confirmar la contraseña actual antes de cambiarla.
+export async function cambiarContrasena(actual: string, nueva: string) {
+  const usuario = auth.currentUser;
+  if (!usuario || !usuario.email) {
+    throw new Error("No hay sesión iniciada");
+  }
+
+  try {
+    const credencial = EmailAuthProvider.credential(usuario.email, actual);
+    await reauthenticateWithCredential(usuario, credencial);
+  } catch (error) {
+    const codigo = (error as { code?: string })?.code;
+    if (codigo === "auth/invalid-credential" || codigo === "auth/wrong-password") {
+      // Código propio: traducirErrorFirebase lo convierte en mensaje
+      const personalizado = new Error(
+        "La contraseña actual no es correcta"
+      ) as Error & { code: string };
+      personalizado.code = "app/contrasena-actual-incorrecta";
+      throw personalizado;
+    }
+    throw error;
+  }
+
+  await updatePassword(usuario, nueva);
 }
