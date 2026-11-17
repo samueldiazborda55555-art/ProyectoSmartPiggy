@@ -9,7 +9,7 @@ import CampoTexto from "@/components/ui/CampoTexto";
 import { colores } from "@/constants/colores";
 import { espaciado } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
-import { enviarCorreoRecuperacion } from "@/servicios/servicioAutenticacion";
+import { recuperarContrasena } from "@/servicios/servicioAutenticacion";
 import { errorCorreo } from "@/utilidades/validadores";
 
 export default function OlvideContrasena() {
@@ -24,7 +24,7 @@ export default function OlvideContrasena() {
 
     setCargando(true);
     try {
-      await enviarCorreoRecuperacion(correo.trim());
+      await recuperarContrasena(correo.trim());
       router.replace({
         pathname: "/Autenticacion/exito",
         params: {
