@@ -1,3 +1,4 @@
+
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -7,25 +8,44 @@ import { colores } from "@/constants/colores";
 type Props = {
   nombre: React.ComponentProps<typeof Ionicons>["name"];
   activo: boolean;
+  desplazamiento?: number;
 };
 
-// Cuadro blanco detrás del ícono de la pestaña activa, como en el Figma
-export default function IconoPestana({ nombre, activo }: Props) {
+export default function IconoPestana({
+  nombre,
+  activo,
+  desplazamiento = 0,
+}: Props) {
   return (
-    <View style={[styles.contenedor, activo && styles.activo]}>
-      <Ionicons name={nombre} size={28} color={colores.textoPrincipal} />
+    <View
+      style={[
+        styles.contenedor,
+        activo && styles.activo,
+        {
+          transform: [
+            { translateX: desplazamiento },
+          ],
+        },
+      ]}
+    >
+      <Ionicons
+        name={nombre}
+        size={25}
+        color={colores.textoPrincipal}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   contenedor: {
-    width: 56,
-    height: 56,
-    borderRadius: 18,
+    width: 48,
+    height: 48,
+    borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
   },
+
   activo: {
     backgroundColor: colores.fondoClaro,
   },

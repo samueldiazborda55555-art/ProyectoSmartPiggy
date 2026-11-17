@@ -14,9 +14,9 @@ export const radios = {
   boton: 22,   // botón de 44 de alto = forma de píldora
   tarjeta: 20,
   hoja: 56,    // esquinas superiores de la hoja
-  barra: 56,   // esquinas superiores de la barra inferior
+  barra: 65,   // esquinas superiores de la barra inferior
 } as const;
 
 export const medidas = {
-  alturaBarra: 96, // alto de la barra verde inferior (sin la zona segura)
+  alturaBarra: 95, // alto de la barra verde inferior (sin la zona segura)
 } as const;
