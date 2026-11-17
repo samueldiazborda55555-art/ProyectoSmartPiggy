@@ -9,7 +9,8 @@ export default function LayoutPestanas() {
   const insets = useSafeAreaInsets();
 
   return (
-    <Tabs
+        <Tabs
+      backBehavior="history"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,

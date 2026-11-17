@@ -22,6 +22,7 @@ export function calcularResumen(movs: Movimiento[], ahora = new Date()) {
 
   return {
     saldo: ingresos - gastos,
+    ingresoTotal: ingresos,
     gastoTotal: gastos,
     ingresosSemana: suma(semana.filter((m) => m.tipo === "ingreso")),
     comidaSemana: suma(
