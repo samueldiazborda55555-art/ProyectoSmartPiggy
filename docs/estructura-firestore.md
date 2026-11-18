@@ -53,7 +53,7 @@ Los ejemplos muestran los campos del documento. Los identificadores forman parte
 {
   "nombre": "Mercado semanal",
   "monto": 85000,
-  "fecha": "2026-11-17T09:30:00",
+  "fecha": "2026-11-17T14:30:00.000Z",
   "categoriaId": "alimentos",
   "tipo": "gasto",
   "mensaje": "Compra de la semana"
@@ -112,7 +112,8 @@ Los ejemplos muestran los campos del documento. Los identificadores forman parte
 
 - El monto de cada movimiento y aporte y el monto objetivo de cada meta deben ser mayores que cero. `tipo` indica si un movimiento es un ingreso o un gasto.
 - Las metas nuevas comienzan con `montoAhorrado: 0`. El total representa la suma de los aportes vigentes y es cero si la meta carece de aportes.
-- `fecha` y `fechaNacimiento` se guardan como cadenas ISO 8601. Los ejemplos de movimientos y aportes conservan el formato local actual `YYYY-MM-DDTHH:mm:ss`, y el de nacimiento usa `YYYY-MM-DD`. `creadoEn` conserva su tipo `Timestamp`.
+- La `fecha` de los movimientos nuevos se guarda en UTC como `YYYY-MM-DDTHH:mm:ss.sssZ`. El servicio exige `Z` o un desplazamiento `±HH:mm` en la entrada y normaliza a UTC antes de guardar. Este formato uniforme permite ordenar cronológicamente con `orderBy("fecha", "desc")`.
+- Los ejemplos de aportes conservan el formato local `YYYY-MM-DDTHH:mm:ss` y `fechaNacimiento` usa `YYYY-MM-DD`. `creadoEn` conserva su tipo `Timestamp`.
 - Firestore genera los identificadores de movimientos, metas, aportes y categorías personalizadas. El UID del perfil proviene de Firebase Authentication. Al leer, los servicios obtienen el `id` del objeto a partir del ID del documento.
 - Cada usuario accede únicamente a sus datos. El criterio de acceso para el perfil y sus subcolecciones es que el UID autenticado coincida con el `{uid}` de la ruta.
 - Las nueve categorías base permanecen en [categorias.ts](../src/constants/categorias.ts): `comida`, `transporte`, `medicina`, `alimentos`, `alquiler`, `regalos`, `ahorros`, `entretenimiento` y `mas`. Las categorías personalizadas se guardan en Firestore bajo el usuario.
