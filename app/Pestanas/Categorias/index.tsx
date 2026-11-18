@@ -14,15 +14,43 @@ import { useRouter } from 'expo-router';
 import FichaCategoria from '../../../src/components/finanzas/FichaCategoria';
 import { CATEGORIAS } from '../../../src/constants/categorias';
 import { colores } from '../../../src/constants/colores';
+import { Categoria } from '../../../src/tipos/categoria';
 
 export default function PantallaCategorias() {
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   const [nombreNuevo, setNombreNuevo] = useState('');
 
+  // Lista de categorías en estado local (Karen la llevará a Firestore)
+  const [categorias, setCategorias] = useState<Categoria[]>(CATEGORIAS);
+
   const cerrarModal = () => {
     setModalVisible(false);
     setNombreNuevo('');
+  };
+
+  const guardarCategoria = () => {
+    const nombre = nombreNuevo.trim();
+    if (!nombre) return; // no se guarda una categoría sin nombre
+
+    // Si ya existe una con el mismo nombre, no se repite
+    const yaExiste = categorias.some(
+      (c) => c.nombre.toLowerCase() === nombre.toLowerCase()
+    );
+    if (yaExiste) {
+      cerrarModal();
+      return;
+    }
+
+    const nueva: Categoria = { id: 'personalizada', nombre, icono: 'personalizada' };
+
+    // La ficha nueva va antes del cuadro "Más", que siempre queda al final
+    setCategorias((actual) => {
+      const sinMas = actual.filter((c) => c.id !== 'mas');
+      const mas = actual.filter((c) => c.id === 'mas');
+      return [...sinMas, nueva, ...mas];
+    });
+    cerrarModal();
   };
 
   return (
@@ -64,8 +92,8 @@ export default function PantallaCategorias() {
         </View>
 
         <ScrollView style={styles.hoja} contentContainerStyle={styles.cuadricula}>
-          {CATEGORIAS.map((categoria) => (
-            <View key={categoria.id} style={styles.celda}>
+          {categorias.map((categoria, indice) => (
+            <View key={`${categoria.id}-${indice}`} style={styles.celda}>
               <FichaCategoria
                 categoria={categoria}
                 seleccionada={categoria.id === 'comida'}
@@ -74,8 +102,10 @@ export default function PantallaCategorias() {
                     ? () => setModalVisible(true)
                     : categoria.id === 'ahorros'
                     ? () => router.push('/Pestanas/Categorias/Ahorros' as any)
+                    : categoria.id === 'personalizada'
+                    ? () => {}
                     : undefined
-}
+                }
               />
             </View>
           ))}
@@ -93,16 +123,18 @@ export default function PantallaCategorias() {
             <Text style={styles.tituloModal}>Nueva categoría</Text>
             <TextInput
               style={styles.campo}
-              placeholder="Nombre de la categoría"
+              placeholder="Escribir..."
               placeholderTextColor={colores.textoSecundario}
               value={nombreNuevo}
               onChangeText={setNombreNuevo}
+              onSubmitEditing={guardarCategoria}
+              autoFocus
             />
             <View style={styles.botones}>
               <Pressable style={styles.botonCancelar} onPress={cerrarModal}>
                 <Text style={styles.textoCancelar}>Cancelar</Text>
               </Pressable>
-              <Pressable style={styles.botonGuardar} onPress={cerrarModal}>
+              <Pressable style={styles.botonGuardar} onPress={guardarCategoria}>
                 <Text style={styles.textoGuardar}>Guardar</Text>
               </Pressable>
             </View>

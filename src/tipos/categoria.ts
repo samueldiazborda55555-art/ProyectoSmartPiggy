@@ -8,6 +8,7 @@ export type CategoriaId =
   | 'regalos'
   | 'ahorros'
   | 'entretenimiento'
+  | 'personalizada'
   | 'mas';
 
 export interface Categoria {

@@ -9,6 +9,7 @@ import { Categoria, CategoriaId } from '../../tipos/categoria';
 type NombreIcono = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
 export const ICONOS: Record<CategoriaId, NombreIcono> = {
+  ingresos: 'cash-plus',
   comida: 'silverware-fork-knife',
   transporte: 'bus',
   medicina: 'pill',
@@ -17,6 +18,7 @@ export const ICONOS: Record<CategoriaId, NombreIcono> = {
   regalos: 'gift-outline',
   ahorros: 'piggy-bank-outline',
   entretenimiento: 'ticket-outline',
+  personalizada: 'shape-outline',
   mas: 'plus',
 };
 
