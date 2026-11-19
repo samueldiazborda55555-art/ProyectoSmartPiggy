@@ -4,8 +4,12 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
+  type FirestoreError,
+  type QuerySnapshot,
+  type Unsubscribe,
 } from "firebase/firestore";
 import { CATEGORIAS } from "../constants/categorias";
 import type { CategoriaId } from "../tipos/categoria";
@@ -26,6 +30,17 @@ function coleccionMovimientos(idUsuario: string) {
   }
 
   return collection(db, "usuarios", idUsuario, "movimientos");
+}
+
+function consultaMovimientos(idUsuario: string) {
+  return query(coleccionMovimientos(idUsuario), orderBy("fecha", "desc"));
+}
+
+function convertirMovimientos(resultado: QuerySnapshot): Movimiento[] {
+  return resultado.docs.map((documento) => ({
+    ...(documento.data() as DatosMovimiento),
+    id: documento.id,
+  }));
 }
 
 export async function crearMovimiento(
@@ -87,13 +102,20 @@ export async function crearMovimiento(
 }
 
 export async function obtenerMovimientos(idUsuario: string): Promise<Movimiento[]> {
-  const consulta = query(coleccionMovimientos(idUsuario), orderBy("fecha", "desc"));
-  const resultado = await getDocs(consulta);
+  const resultado = await getDocs(consultaMovimientos(idUsuario));
+  return convertirMovimientos(resultado);
+}
 
-  return resultado.docs.map((documento) => ({
-    ...(documento.data() as DatosMovimiento),
-    id: documento.id,
-  }));
+export function escucharMovimientos(
+  idUsuario: string,
+  alCambiar: (movimientos: Movimiento[]) => void,
+  alFallar: (error: FirestoreError) => void,
+): Unsubscribe {
+  return onSnapshot(
+    consultaMovimientos(idUsuario),
+    (resultado) => alCambiar(convertirMovimientos(resultado)),
+    alFallar,
+  );
 }
 
 export async function eliminarMovimiento(
