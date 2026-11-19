@@ -5,6 +5,7 @@ import {
   doc,
   getDocs,
   getDocsFromServer,
+  increment,
   limit,
   onSnapshot,
   query,
@@ -20,6 +21,7 @@ import { auth, db } from "./firebase";
 
 type DatosMeta = Pick<Meta, "nombre" | "icono" | "montoObjetivo">;
 type MetaGuardada = Omit<Meta, "aportes">;
+type DatosAporte = Omit<Aporte, "id">;
 
 function verificarUsuario(idUsuario: string) {
   if (!idUsuario?.trim() || idUsuario.includes("/") || auth.currentUser?.uid !== idUsuario) {
@@ -30,6 +32,35 @@ function verificarUsuario(idUsuario: string) {
 function coleccionMetas(idUsuario: string) {
   verificarUsuario(idUsuario);
   return collection(db, "usuarios", idUsuario, "metas");
+}
+
+function referenciaMeta(idUsuario: string, idMeta: string) {
+  const metas = coleccionMetas(idUsuario);
+  if (
+    typeof idMeta !== "string" || !idMeta.trim() || idMeta.includes("/") ||
+    idMeta === "." || idMeta === ".." || /^__.*__$/.test(idMeta)
+  ) {
+    throw new Error("El identificador de la meta no es válido.");
+  }
+  return doc(metas, idMeta);
+}
+
+function validarFechaAporte(fecha: string) {
+  const formato =
+    /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,3})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)?$/;
+  if (typeof fecha !== "string" || !formato.test(fecha)) {
+    throw new Error("La fecha del aporte debe usar el formato ISO 8601.");
+  }
+
+  const dia = fecha.slice(0, 10);
+  const calendario = new Date(`${dia}T00:00:00Z`);
+  if (
+    !Number.isFinite(Date.parse(fecha)) ||
+    !Number.isFinite(calendario.getTime()) ||
+    calendario.toISOString().slice(0, 10) !== dia
+  ) {
+    throw new Error("La fecha del aporte no es válida.");
+  }
 }
 
 function convertirAportes(resultado: QuerySnapshot): Aporte[] {
@@ -182,4 +213,49 @@ export async function eliminarMeta(idUsuario: string, idMeta: string): Promise<v
       return false;
     });
   }
+}
+
+export async function agregarAporte(
+  idUsuario: string,
+  idMeta: string,
+  datos: DatosAporte,
+): Promise<Aporte> {
+  const meta = referenciaMeta(idUsuario, idMeta);
+  const { monto, fecha } = datos;
+  if (!Number.isFinite(monto) || monto <= 0) {
+    throw new Error("El monto del aporte debe ser un número finito mayor que cero.");
+  }
+  validarFechaAporte(fecha);
+
+  const aporte = doc(collection(meta, "aportes"));
+  await runTransaction(db, async (transaccion) => {
+    verificarUsuario(idUsuario);
+    const actual = await transaccion.get(meta);
+    verificarUsuario(idUsuario);
+    if (!actual.exists()) {
+      throw new Error("La meta no existe.");
+    }
+
+    const { montoAhorrado } = convertirMeta(actual.id, actual.data());
+    const nuevoTotal = montoAhorrado + monto;
+    if (
+      !Number.isFinite(montoAhorrado) || montoAhorrado < 0 ||
+      !Number.isFinite(nuevoTotal) || nuevoTotal <= montoAhorrado ||
+      nuevoTotal > Number.MAX_SAFE_INTEGER
+    ) {
+      throw new Error("El nuevo monto ahorrado está fuera del rango válido.");
+    }
+
+    transaccion.set(aporte, { monto, fecha });
+    transaccion.update(meta, { montoAhorrado: increment(monto) });
+  });
+
+  return { id: aporte.id, monto, fecha };
+}
+
+export async function obtenerAportes(idUsuario: string, idMeta: string): Promise<Aporte[]> {
+  const meta = referenciaMeta(idUsuario, idMeta);
+  const resultado = await getDocs(collection(meta, "aportes"));
+  verificarUsuario(idUsuario);
+  return convertirAportes(resultado).sort((a, b) => Date.parse(b.fecha) - Date.parse(a.fecha));
 }
