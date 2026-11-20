@@ -5,8 +5,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import PantallaBase from "@/components/disposicion/PantallaBase";
-import BarraProgresoPresupuesto from "@/components/finanzas/BarraProgresoPresupuesto";
 import ListaMovimientos from "@/components/finanzas/ListaMovimientos";
+import PresupuestoMensual from "@/components/finanzas/PresupuestoMensual";
 import ProgresoCircular from "@/components/finanzas/ProgresoCircular";
 import ResumenSaldo from "@/components/finanzas/ResumenSaldo";
 import ControlSegmentado from "@/components/ui/ControlSegmentado";
@@ -15,14 +15,12 @@ import { espaciado, radios } from "@/constants/espaciado";
 import { tipografia } from "@/constants/tipografia";
 import { useMovimientos } from "@/hooks/useMovimientos";
 import { formatearMoneda } from "@/utilidades/formatearMoneda";
+import type { Periodo } from "@/utilidades/resumenFinanciero";
 import {
   calcularResumen,
   filtrarPorPeriodo,
-  mensajePresupuesto,
 } from "@/utilidades/resumenFinanciero";
-import type { Periodo } from "@/utilidades/resumenFinanciero";
 
-const PRESUPUESTO_MENSUAL = 20000;
 const PORCENTAJE_META_DEMO = 40;
 
 const OPCIONES_PERIODO: { valor: Periodo; etiqueta: string }[] = [
@@ -42,11 +40,7 @@ function FilaEstadistica({
 }) {
   return (
     <View style={styles.filaEstadistica}>
-      <Ionicons
-        name={icono}
-        size={26}
-        color={colores.textoPrincipal}
-      />
+      <Ionicons name={icono} size={26} color={colores.textoPrincipal} />
 
       <View style={styles.textosEstadistica}>
         <Text style={styles.etiquetaEstadistica}>{etiqueta}</Text>
@@ -64,13 +58,6 @@ export default function Inicio() {
   const hayMovimientos = movimientos.length > 0;
   const resumen = calcularResumen(movimientos);
 
-  const porcentaje = hayMovimientos
-    ? Math.min(
-        100,
-        Math.round((resumen.gastoTotal / PRESUPUESTO_MENSUAL) * 100)
-      )
-    : 0;
-
   const visibles = filtrarPorPeriodo(movimientos, periodo);
   const porcentajeMeta = hayMovimientos ? PORCENTAJE_META_DEMO : 0;
 
@@ -87,11 +74,7 @@ export default function Inicio() {
           <View style={styles.cabecera}>
             <View style={styles.saludo}>
               <View style={styles.avatar}>
-                <Ionicons
-                  name="person"
-                  size={20}
-                  color={colores.secundario}
-                />
+                <Ionicons name="person" size={20} color={colores.secundario} />
               </View>
 
               <Text style={styles.textoSaludo}>Hola, Bienvenido</Text>
@@ -116,11 +99,7 @@ export default function Inicio() {
             gastoTotal={resumen.gastoTotal}
           />
 
-          <BarraProgresoPresupuesto
-            porcentaje={porcentaje}
-            meta={hayMovimientos ? PRESUPUESTO_MENSUAL : 0}
-            mensaje={mensajePresupuesto(porcentaje, hayMovimientos)}
-          />
+          <PresupuestoMensual movimientos={movimientos} />
         </View>
       }
     >
@@ -129,9 +108,7 @@ export default function Inicio() {
           <ProgresoCircular
             porcentaje={porcentajeMeta}
             tamano={64}
-            colorFondo={
-              hayMovimientos ? "transparent" : colores.textoPrincipal
-            }
+            colorFondo={hayMovimientos ? "transparent" : colores.textoPrincipal}
           >
             {hayMovimientos ? (
               <Ionicons
@@ -174,11 +151,7 @@ export default function Inicio() {
         accessibilityRole="button"
         accessibilityLabel="Agregar ingresos"
       >
-        <Ionicons
-          name="add-circle"
-          size={21}
-          color={colores.textoClaro}
-        />
+        <Ionicons name="add-circle" size={21} color={colores.textoClaro} />
 
         <Text style={styles.textoAgregarIngreso}>Agregar ingresos</Text>
       </TouchableOpacity>
@@ -194,19 +167,15 @@ export default function Inicio() {
       {!hayMovimientos ? (
         <View style={styles.vacio}>
           <View style={styles.iconoVacio}>
-            <Ionicons
-              name="wallet-outline"
-              size={26}
-              color={colores.acento}
-            />
+            <Ionicons name="wallet-outline" size={26} color={colores.acento} />
           </View>
 
-          <Text style={styles.tituloVacio}>
-            Aún no tienes movimientos
-          </Text>
+          <Text style={styles.tituloVacio}>Aún no tienes movimientos</Text>
 
           <Text style={styles.textoVacio}>
-            {"Registra tu primer ingreso o gasto aquí\nVerás el resumen de tu dinero"}
+            {
+              "Registra tu primer ingreso o gasto aquí\nVerás el resumen de tu dinero"
+            }
           </Text>
         </View>
       ) : visibles.length === 0 ? (
